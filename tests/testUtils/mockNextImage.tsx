@@ -7,8 +7,6 @@
  * The `mockNextImage` function is used to set up the mock by calling `vi.mock('next/image', ...)` with the `MockNextImage` component.
  */
 
-/* eslint-disable @next/next/no-img-element */
-
 import { vi } from 'vitest'
 import type { ImageProps, StaticImageData } from 'next/image'
 import type { ComponentType, ReactElement } from 'react'
@@ -29,12 +27,7 @@ interface ESModuleDefault<T> {
  * The type is inferred to be either the inferred type `T`, `StaticImageData`, or a string.
  * This type is used to ensure that the `src` prop in the `ImageProps` type is correctly typed.
  */
-type StaticRequire = ImageProps['src'] extends
-  | infer T
-  | StaticImageData
-  | string
-  ? T
-  : never
+type StaticRequire = ImageProps['src'] extends infer T | StaticImageData | string ? T : never
 
 /**
  * Maps a static image import to its source string.
@@ -44,9 +37,7 @@ type StaticRequire = ImageProps['src'] extends
  * @param staticImport - The static image import to map to a source string.
  * @returns The source string for the static image.
  */
-const mapStaticImportToSrc = (
-  staticImport: StaticImageData | StaticRequire,
-): string => {
+const mapStaticImportToSrc = (staticImport: StaticImageData | StaticRequire): string => {
   if ('default' in staticImport) {
     return staticImport.default.src
   }
@@ -61,9 +52,7 @@ const mapStaticImportToSrc = (
  * @param src - The static image import or string to map to a source string.
  * @returns The source string for the static image or the input string.
  */
-const mapNextImageSrcToString = (
-  src: StaticImageData | StaticRequire | string,
-): string => {
+const mapNextImageSrcToString = (src: StaticImageData | StaticRequire | string): string => {
   if (typeof src === 'string') {
     return src
   }
@@ -103,12 +92,10 @@ function MockNextImage({
  *
  * @returns A function that can be returned from a vi.mock() call to set up a mock for the `next/image` component.
  */
-const mockNextImage = vi.hoisted(
-  (): ESModuleDefault<ComponentType<ImageProps>> => {
-    return {
-      __esModule: true,
-      default: MockNextImage,
-    }
-  },
-)
+const mockNextImage = vi.hoisted((): ESModuleDefault<ComponentType<ImageProps>> => {
+  return {
+    __esModule: true,
+    default: MockNextImage,
+  }
+})
 export default mockNextImage
