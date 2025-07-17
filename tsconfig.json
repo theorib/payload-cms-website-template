@@ -44,7 +44,8 @@
     "next-env.d.ts",
     "next.config.ts",
     "next-sitemap.config.cjs",
-    "eslint.config.ts"
+    "eslint.config.ts",
+    "postcss.config.mjs",
   ],
   "exclude": [
     "node_modules"
