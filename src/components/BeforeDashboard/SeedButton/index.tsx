@@ -1,6 +1,6 @@
 'use client'
 
-import type React from 'react';
+import type React from 'react'
 import { Fragment, useCallback, useState } from 'react'
 import { toast } from '@payloadcms/ui'
 
@@ -21,6 +21,7 @@ export const SeedButton: React.FC = () => {
   const [error, setError] = useState<null | string>(null)
 
   const handleClick = useCallback(
+    // eslint-disable-next-line @typescript-eslint/require-await
     async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
 
@@ -44,19 +45,19 @@ export const SeedButton: React.FC = () => {
           new Promise((resolve, reject) => {
             try {
               fetch('/next/seed', { method: 'POST', credentials: 'include' })
-                .then((res) => {
+                .then(res => {
                   if (res.ok) {
                     resolve(true)
                     setSeeded(true)
                   } else {
-                    reject('An error occurred while seeding.')
+                    reject(new Error('An error occurred while seeding.'))
                   }
                 })
-                .catch((error) => {
-                  reject(error)
+                .catch(error => {
+                  reject(error instanceof Error ? error : new Error(String(error)))
                 })
             } catch (error) {
-              reject(error)
+              reject(error instanceof Error ? error : new Error(String(error)))
             }
           }),
           {
@@ -80,7 +81,7 @@ export const SeedButton: React.FC = () => {
 
   return (
     <Fragment>
-      <button className="seedButton" onClick={handleClick}>
+      <button className="seedButton" onClick={(e) => { void handleClick(e) }}>
         Seed your database
       </button>
       {message}
