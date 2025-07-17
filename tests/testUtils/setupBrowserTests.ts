@@ -1,9 +1,18 @@
-import 'dotenv/config'
 import { beforeAll, beforeEach, afterEach, afterAll, vi } from 'vitest'
 import mockNextFontGoogle from './mockNextFontGoogle'
 import mockNextImage from './mockNextImage'
 // learn more: https://github.com/testing-library/jest-dom
 // import '@testing-library/jest-dom/vitest';
+
+// Mock environment variables for browser mode
+Object.defineProperty(globalThis, 'process', {
+  value: {
+    env: {
+      NODE_ENV: 'test',
+      PAYLOAD_SECRET: 'test-secret',
+    },
+  },
+})
 
 mockNextFontGoogle(['Rubik_Scribble', 'Inter'])
 
