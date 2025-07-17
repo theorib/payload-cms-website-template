@@ -21,6 +21,7 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
 
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
+  // eslint-disable-next-line @typescript-eslint/require-await
 }): Promise<Metadata> => {
   const { doc } = args
 
