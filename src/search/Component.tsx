@@ -5,6 +5,7 @@ import type React from 'react'
 import { useState, useEffect } from 'react'
 import { useDebounce } from '@/utilities/useDebounce'
 import { useRouter } from 'next/navigation'
+import type { Route } from 'next'
 
 export const Search: React.FC = () => {
   const [value, setValue] = useState('')
@@ -13,7 +14,7 @@ export const Search: React.FC = () => {
   const debouncedValue = useDebounce(value)
 
   useEffect(() => {
-    router.push(`/search${debouncedValue ? `?q=${debouncedValue}` : ''}`)
+    router.push(`/search${debouncedValue ? `?q=${debouncedValue}` : ''}` as Route)
   }, [debouncedValue, router])
 
   return (
