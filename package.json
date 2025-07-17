@@ -35,7 +35,8 @@
     "test:e2e:ui": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pmpm exec playwright test --ui",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --browser.headless",
     "test:watch": "cross-env NODE_OPTIONS=--no-deprecation vitest watch --browser.headless",
-    "test:watch:ui": "cross-env NODE_OPTIONS=--no-deprecation vitest watch --ui"
+    "test:watch:ui": "cross-env NODE_OPTIONS=--no-deprecation vitest watch --ui",
+    "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.47.0",
