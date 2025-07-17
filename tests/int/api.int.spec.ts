@@ -1,5 +1,5 @@
 import { getPayload, type Payload } from 'payload'
-import config from '@/payload.config'
+import config from '@payload-config'
 
 import { describe, it, beforeAll, expect } from 'vitest'
 
