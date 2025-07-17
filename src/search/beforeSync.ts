@@ -24,8 +24,8 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
     doc: { relationTo: collection },
   } = searchDoc
 
-  const typedDoc = originalDoc as Post
-  const { slug, id, categories, title, meta } = typedDoc
+  const postDoc = originalDoc as Post
+  const { slug, id, categories, title, meta } = postDoc
 
   const modifiedDoc: TypedDocToSync = {
     ...searchDoc,
