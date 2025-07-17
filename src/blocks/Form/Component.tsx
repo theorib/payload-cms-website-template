@@ -12,6 +12,21 @@ import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
 
+
+interface FormSubmissionErrorResponse {
+  errors?: Array<{
+    message: string
+    field?: string
+  }>
+  status?: number
+  message?: string
+}
+
+interface FormError {
+  message: string
+  status?: string
+}
+
 export type FormBlockType = {
   blockName?: string
   blockType?: 'formBlock'
@@ -44,7 +59,7 @@ export const FormBlock: React.FC<
 
   const [isLoading, setIsLoading] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState<boolean>()
-  const [error, setError] = useState<{ message: string; status?: string } | undefined>()
+  const [error, setError] = useState<FormError | undefined>()
   const router = useRouter()
 
   const onSubmit = useCallback(
@@ -55,7 +70,7 @@ export const FormBlock: React.FC<
 
         const dataToSend = Object.entries(data).map(([name, value]) => ({
           field: name,
-          value,
+          value: typeof value === 'string' ? value : JSON.stringify(value),
         }))
 
         // delay loading indicator by 1s
@@ -66,7 +81,7 @@ export const FormBlock: React.FC<
         try {
           const req = await fetch(`${getClientSideURL()}/api/form-submissions`, {
             body: JSON.stringify({
-              form: formID,
+              form: formID ? parseInt(formID, 10) : 0,
               submissionData: dataToSend,
             }),
             headers: {
@@ -75,7 +90,7 @@ export const FormBlock: React.FC<
             method: 'POST',
           })
 
-          const res = await req.json()
+          const res = await req.json() as FormSubmissionErrorResponse
 
           clearTimeout(loadingTimerID)
 
@@ -84,7 +99,7 @@ export const FormBlock: React.FC<
 
             setError({
               message: res.errors?.[0]?.message || 'Internal Server Error',
-              status: res.status,
+              status: req.status.toString(),
             })
 
             return
@@ -98,7 +113,7 @@ export const FormBlock: React.FC<
 
             const redirectUrl = url
 
-            if (redirectUrl) router.push(redirectUrl)
+            if (redirectUrl) router.push(redirectUrl as never)
           }
         } catch (err) {
           console.warn(err)
@@ -122,28 +137,32 @@ export const FormBlock: React.FC<
       <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
-            <RichText data={confirmationMessage} />
+            <RichText data={confirmationMessage as SerializedEditorState} />
           )}
           {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
           {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
           {!hasSubmitted && (
-            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+            <form id={formID} onSubmit={(e) => {
+              e.preventDefault()
+              void handleSubmit(onSubmit)()
+            }}>
               <div className="mb-4 last:mb-0">
                 {formFromProps &&
                   formFromProps.fields &&
                   formFromProps.fields?.map((field, index) => {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
+                    const Field = fields?.[field.blockType as keyof typeof fields] as React.FC<Record<string, unknown>>
                     if (Field) {
                       return (
                         <div className="mb-6 last:mb-0" key={index}>
                           <Field
-                            form={formFromProps}
-                            {...field}
-                            {...formMethods}
-                            control={control}
-                            errors={errors}
-                            register={register}
+                            {...{
+                              form: formFromProps,
+                              ...field,
+                              ...formMethods,
+                              control,
+                              errors,
+                              register,
+                            } as Record<string, unknown>}
                           />
                         </div>
                       )
