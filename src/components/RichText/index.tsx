@@ -10,6 +10,7 @@ import {
   LinkJSXConverter,
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
+import type { Route } from 'next'
 
 import { CodeBlock, type CodeBlockProps } from '@/blocks/Code/Component'
 
@@ -28,11 +29,14 @@ type NodeTypes =
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   const { value, relationTo } = linkNode.fields.doc!
-  if (typeof value !== 'object') {
+  if (typeof value !== 'object' || value === null) {
     throw new Error('Expected value to be an object')
   }
-  const slug = (value as { slug: string }).slug
-  return relationTo === 'posts' ? `/posts/${slug}` : `/${slug}`
+  if (!('slug' in value) || typeof value.slug !== 'string') {
+    throw new Error('Expected value to have a slug property of type string')
+  }
+  const slug = value.slug
+  return (relationTo === 'posts' ? `/posts/${slug}` : `/${slug}`) as Route
 }
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
