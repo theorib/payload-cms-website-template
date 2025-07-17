@@ -9,7 +9,7 @@ import {
 
 import { link } from '@/fields/link'
 
-const columnFields: Field[] = [
+const columnFields: Array<Field> = [
   {
     name: 'size',
     type: 'select',

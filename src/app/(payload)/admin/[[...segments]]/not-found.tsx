@@ -8,10 +8,10 @@ import { importMap } from '../importMap'
 
 type Args = {
   params: Promise<{
-    segments: string[]
+    segments: Array<string>
   }>
   searchParams: Promise<{
-    [key: string]: string | string[]
+    [key: string]: string | Array<string>
   }>
 }
 

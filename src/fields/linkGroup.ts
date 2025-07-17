@@ -6,7 +6,7 @@ import deepMerge from '@/utilities/deepMerge'
 import { link } from './link'
 
 type LinkGroupType = (options?: {
-  appearances?: LinkAppearances[] | false
+  appearances?: Array<LinkAppearances> | false
   overrides?: Partial<ArrayField>
 }) => Field
 

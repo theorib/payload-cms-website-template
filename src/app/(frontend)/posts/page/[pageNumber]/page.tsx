@@ -5,7 +5,6 @@ import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
 
@@ -78,7 +77,7 @@ export async function generateStaticParams() {
 
   const totalPages = Math.ceil(totalDocs / 10)
 
-  const pages: { pageNumber: string }[] = []
+  const pages: Array<{ pageNumber: string }> = []
 
   for (let i = 1; i <= totalPages; i++) {
     pages.push({ pageNumber: String(i) })

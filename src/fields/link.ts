@@ -16,7 +16,7 @@ export const appearanceOptions: Record<LinkAppearances, { label: string; value: 
 }
 
 type LinkType = (options?: {
-  appearances?: LinkAppearances[] | false
+  appearances?: Array<LinkAppearances> | false
   disableLabel?: boolean
   overrides?: Partial<GroupField>
 }) => Field
@@ -67,7 +67,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
     ],
   }
 
-  const linkTypes: Field[] = [
+  const linkTypes: Array<Field> = [
     {
       name: 'reference',
       type: 'relationship',

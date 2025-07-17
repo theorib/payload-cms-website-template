@@ -1,6 +1,6 @@
-import { Field } from 'payload'
+import { type Field } from 'payload'
 
-export const searchFields: Field[] = [
+export const searchFields: Array<Field> = [
   {
     name: 'slug',
     type: 'text',
