@@ -20,6 +20,7 @@ const CardHeader: React.FC<
 const CardTitle: React.FC<
   { ref?: React.Ref<HTMLHeadingElement> } & React.HTMLAttributes<HTMLHeadingElement>
 > = ({ className, ref, ...props }) => (
+  // eslint-disable-next-line jsx-a11y/heading-has-content
   <h3
     className={cn('text-2xl font-semibold leading-none tracking-tight', className)}
     ref={ref}
