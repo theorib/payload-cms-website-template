@@ -2,7 +2,7 @@
 import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
 
 import { useRouter } from 'next/navigation'
-import type React from 'react';
+import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
@@ -11,7 +11,6 @@ import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
-
 
 interface FormSubmissionErrorResponse {
   errors?: Array<{
@@ -39,7 +38,7 @@ export const FormBlock: React.FC<
   {
     id?: string
   } & FormBlockType
-> = (props) => {
+> = props => {
   const {
     enableIntro,
     form: formFromProps,
@@ -90,7 +89,7 @@ export const FormBlock: React.FC<
             method: 'POST',
           })
 
-          const res = await req.json() as FormSubmissionErrorResponse
+          const res = (await req.json()) as FormSubmissionErrorResponse
 
           clearTimeout(loadingTimerID)
 
@@ -134,7 +133,7 @@ export const FormBlock: React.FC<
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
-      <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
+      <div className="border-border rounded-[0.8rem] border p-4 lg:p-6">
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <RichText data={confirmationMessage as SerializedEditorState} />
@@ -142,27 +141,32 @@ export const FormBlock: React.FC<
           {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
           {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
           {!hasSubmitted && (
-            <form id={formID} onSubmit={(e) => {
-              e.preventDefault()
-              void handleSubmit(onSubmit)()
-            }}>
+            <form
+              id={formID}
+              onSubmit={e => {
+                e.preventDefault()
+                void handleSubmit(onSubmit)()
+              }}
+            >
               <div className="mb-4 last:mb-0">
                 {formFromProps &&
                   formFromProps.fields &&
                   formFromProps.fields?.map((field, index) => {
-                    const Field = fields?.[field.blockType as keyof typeof fields] as React.FC<Record<string, unknown>>
+                    const Field = fields?.[field.blockType as keyof typeof fields] as React.FC<
+                      Record<string, unknown>
+                    >
                     if (Field) {
                       return (
                         <div className="mb-6 last:mb-0" key={index}>
                           <Field
-                            {...{
+                            {...({
                               form: formFromProps,
                               ...field,
                               ...formMethods,
                               control,
                               errors,
                               register,
-                            } as Record<string, unknown>}
+                            } as Record<string, unknown>)}
                           />
                         </div>
                       )

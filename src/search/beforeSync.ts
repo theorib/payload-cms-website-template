@@ -69,7 +69,7 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
       }
     }
 
-    modifiedDoc.categories = populatedCategories.map((each) => ({
+    modifiedDoc.categories = populatedCategories.map(each => ({
       relationTo: 'categories' as const,
       categoryID: String(each.id),
       title: each.title,

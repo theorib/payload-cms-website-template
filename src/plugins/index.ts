@@ -30,7 +30,7 @@ export const plugins: Array<Plugin> = [
     overrides: {
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
-        return defaultFields.map((field) => {
+        return defaultFields.map(field => {
           if ('name' in field && field.name === 'from') {
             return {
               ...field,
@@ -49,7 +49,7 @@ export const plugins: Array<Plugin> = [
   }),
   nestedDocsPlugin({
     collections: ['categories'],
-    generateURL: (docs) => docs.reduce((url, doc) => `${url}/${(doc as { slug: string }).slug}`, ''),
+    generateURL: docs => docs.reduce((url, doc) => `${url}/${(doc as { slug: string }).slug}`, ''),
   }),
   seoPlugin({
     generateTitle,
@@ -61,7 +61,7 @@ export const plugins: Array<Plugin> = [
     },
     formOverrides: {
       fields: ({ defaultFields }) => {
-        return defaultFields.map((field) => {
+        return defaultFields.map(field => {
           if ('name' in field && field.name === 'confirmationMessage') {
             return {
               ...field,

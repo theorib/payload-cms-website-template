@@ -14,7 +14,7 @@ interface PostWithPopulatedAuthors extends Post {
 // So we use an alternative `populatedAuthors` field to populate the user data, hidden from the admin UI
 export const populateAuthors: CollectionAfterReadHook = async ({ doc, req: { payload } }) => {
   const postDoc = doc as PostWithPopulatedAuthors
-  
+
   if (postDoc?.authors && postDoc?.authors?.length > 0) {
     const authorDocs: Array<User> = []
 
@@ -31,7 +31,7 @@ export const populateAuthors: CollectionAfterReadHook = async ({ doc, req: { pay
         }
 
         if (authorDocs.length > 0) {
-          postDoc.populatedAuthors = authorDocs.map((authorDoc) => ({
+          postDoc.populatedAuthors = authorDocs.map(authorDoc => ({
             id: authorDoc.id?.toString() || null,
             name: authorDoc.name || null,
           }))

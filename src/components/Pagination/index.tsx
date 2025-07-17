@@ -16,7 +16,7 @@ export const Pagination: React.FC<{
   className?: string
   page: number
   totalPages: number
-}> = (props) => {
+}> = props => {
   const router = useRouter()
 
   const { className, page, totalPages } = props

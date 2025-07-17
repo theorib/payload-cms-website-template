@@ -42,7 +42,7 @@ export const seed = async ({
 
   // clear the database
   await Promise.all(
-    globals.map((global) =>
+    globals.map(global =>
       payload.updateGlobal({
         slug: global,
         data: {
@@ -57,13 +57,13 @@ export const seed = async ({
   )
 
   await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
+    collections.map(collection => payload.db.deleteMany({ collection, req, where: {} })),
   )
 
   await Promise.all(
     collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
+      .filter(collection => Boolean(payload.collections[collection].config.versions))
+      .map(collection => payload.db.deleteVersions({ collection, req, where: {} })),
   )
 
   payload.logger.info(`— Seeding demo author and user...`)

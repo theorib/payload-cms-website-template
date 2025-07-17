@@ -14,7 +14,7 @@ export const formatAuthors = (
   authors: Array<NonNullable<NonNullable<Post['populatedAuthors']>[number]>>,
 ) => {
   // Ensure we don't have any authors without a name
-  const authorNames = authors.map((author) => author.name).filter(Boolean)
+  const authorNames = authors.map(author => author.name).filter(Boolean)
 
   if (authorNames.length === 0) return ''
   if (authorNames.length === 1) return authorNames[0]

@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { Fragment } from 'react'
 
 import type { Page } from '@/payload-types'
@@ -19,7 +19,7 @@ const blockComponents = {
 
 export const RenderBlocks: React.FC<{
   blocks: Array<Page['layout'][0]>
-}> = (props) => {
+}> = props => {
   const { blocks } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0

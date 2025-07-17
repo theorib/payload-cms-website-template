@@ -81,7 +81,12 @@ export const SeedButton: React.FC = () => {
 
   return (
     <Fragment>
-      <button className="seedButton" onClick={(e) => { void handleClick(e) }}>
+      <button
+        className="seedButton"
+        onClick={e => {
+          void handleClick(e)
+        }}
+      >
         Seed your database
       </button>
       {message}
