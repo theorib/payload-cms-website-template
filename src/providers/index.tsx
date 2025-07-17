@@ -1,14 +1,18 @@
-import React from 'react'
+import type React from 'react'
 
-import { HeaderThemeProvider } from './HeaderTheme'
-import { ThemeProvider } from './Theme'
+import { DarkThemeProvider } from '@/providers/dark-theme-provider'
 
 export const Providers: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {
   return (
-    <ThemeProvider>
-      <HeaderThemeProvider>{children}</HeaderThemeProvider>
-    </ThemeProvider>
+    <DarkThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      {children}
+    </DarkThemeProvider>
   )
 }
