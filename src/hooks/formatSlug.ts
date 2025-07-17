@@ -14,14 +14,16 @@ const formatSlug =
     }
 
     if (operation === 'create') {
-      const fallbackData = data?.[fallback] || originalDoc?.[fallback]
+      const fallbackData =
+        (data as Record<string, unknown>)?.[fallback] ||
+        (originalDoc as Record<string, unknown>)?.[fallback]
 
       if (fallbackData && typeof fallbackData === 'string') {
         return format(fallbackData)
       }
     }
 
-    return value
+    return value as string
   }
 
 export default formatSlug
