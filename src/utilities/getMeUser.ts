@@ -21,11 +21,9 @@ export const getMeUser = async (args?: {
     },
   })
 
-  const {
-    user,
-  }: {
+  const { user } = (await meUserReq.json()) as {
     user: User
-  } = await meUserReq.json()
+  }
 
   if (validUserRedirect && meUserReq.ok && user) {
     redirect(validUserRedirect)
