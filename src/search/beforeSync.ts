@@ -1,19 +1,39 @@
 import { type BeforeSync, type DocToSync } from '@payloadcms/plugin-search/types'
+import type { Post } from '../payload-types'
+
+interface SearchDocMeta {
+  title?: string | null
+  image?: string | number | null
+  description?: string | null
+}
+
+interface SearchDocCategory {
+  relationTo: 'categories'
+  categoryID: string
+  title: string
+}
+
+interface TypedDocToSync extends DocToSync {
+  slug?: string | null
+  meta?: SearchDocMeta
+  categories?: Array<SearchDocCategory>
+}
 
 export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searchDoc }) => {
   const {
     doc: { relationTo: collection },
   } = searchDoc
 
-  const { slug, id, categories, title, meta } = originalDoc
+  const typedDoc = originalDoc as Post
+  const { slug, id, categories, title, meta } = typedDoc
 
-  const modifiedDoc: DocToSync = {
+  const modifiedDoc: TypedDocToSync = {
     ...searchDoc,
     slug,
     meta: {
       ...meta,
       title: meta?.title || title,
-      image: meta?.image?.id || meta?.image,
+      image: typeof meta?.image === 'object' && meta?.image !== null ? meta.image.id : meta?.image,
       description: meta?.description,
     },
     categories: [],
@@ -27,7 +47,7 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
       }
 
       if (typeof category === 'object') {
-        populatedCategories.push(category)
+        populatedCategories.push({ id: category.id, title: category.title })
         continue
       }
 
@@ -41,7 +61,7 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
       })
 
       if (doc !== null) {
-        populatedCategories.push(doc)
+        populatedCategories.push({ id: doc.id, title: doc.title })
       } else {
         console.error(
           `Failed. Category not found when syncing collection '${collection}' with id: '${id}' to search.`,
@@ -50,7 +70,7 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
     }
 
     modifiedDoc.categories = populatedCategories.map((each) => ({
-      relationTo: 'categories',
+      relationTo: 'categories' as const,
       categoryID: String(each.id),
       title: each.title,
     }))
