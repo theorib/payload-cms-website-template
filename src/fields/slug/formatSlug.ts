@@ -13,13 +13,13 @@ export const formatSlugHook =
       return formatSlug(value)
     }
 
-    if (operation === 'create' || !data?.slug) {
-      const fallbackData = data?.[fallback] || data?.[fallback]
+    if (operation === 'create' || !(data as Record<string, unknown>)?.slug) {
+      const fallbackData = (data as Record<string, unknown>)?.[fallback]
 
       if (fallbackData && typeof fallbackData === 'string') {
         return formatSlug(fallbackData)
       }
     }
 
-    return value
+    return value as string
   }
