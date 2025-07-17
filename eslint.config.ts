@@ -529,6 +529,14 @@ const eslintConfig = [
       'jsx-a11y/anchor-has-content': 'warn',
     },
   },
+  {
+    name: 'test-files-config',
+    files: [...TEST_FILE_PATTERNS_TS],
+    ignores: [...IGNORE_PATTERNS, ...TEST_FILE_PATTERNS_JS],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
 ] satisfies ConfigArray
 
 export default eslintConfig
