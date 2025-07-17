@@ -179,7 +179,7 @@ export const Posts: CollectionConfig<'posts'> = {
             if (siblingData._status === 'published' && !value) {
               return new Date()
             }
-            return value
+            return value as string
           },
         ],
       },
