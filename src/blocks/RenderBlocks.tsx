@@ -9,44 +9,51 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 
+export type PageLayoutBlocks = NonNullable<Page['layout']> | null | undefined
+
 const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+} as const
+
+type BlockSlugs = keyof typeof blockComponents
+
+function isValidBlockType(blockType: string): blockType is BlockSlugs {
+  return blockType in blockComponents
 }
 
 export const RenderBlocks: React.FC<{
-  blocks: Array<Page['layout'][0]>
-}> = props => {
-  const { blocks } = props
+  blocks: PageLayoutBlocks
+}> = ({ blocks }) => {
+  const hasBlocks = blocks && Array.isArray(blocks) && blocks.length
 
-  const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
+  if (!hasBlocks) return null
 
-  if (hasBlocks) {
-    return (
-      <Fragment>
-        {blocks.map((block, index) => {
-          const { blockType } = block
+  return (
+    <Fragment>
+      {blocks.map((block, index) => {
+        const { blockType } = block
+        const key = `${blockType || 'unknown'}-${index}`
 
-          if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType]
-
-            if (Block) {
-              return (
-                <div className="my-16" key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
-                </div>
-              )
-            }
-          }
+        if (!blockType || !isValidBlockType(blockType)) {
+          console.warn(`Unknown or missing block type: ${String(blockType)}`)
           return null
-        })}
-      </Fragment>
-    )
-  }
+        }
 
-  return null
+        const Block = blockComponents[
+          blockType
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ] as React.ComponentType<any>
+
+        return (
+          <div className="my-16" key={key}>
+            <Block {...block} disableInnerContainer />
+          </div>
+        )
+      })}
+    </Fragment>
+  )
 }
