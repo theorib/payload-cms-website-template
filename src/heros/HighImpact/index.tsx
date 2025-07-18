@@ -1,20 +1,14 @@
 'use client'
 import type React from 'react'
-import { useEffect } from 'react'
 
 import type { Page } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
-import { useTheme } from 'next-themes'
 
 export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
-  const { setTheme } = useTheme()
-
-  useEffect(() => {
-    setTheme('dark')
-  })
+  // TODO: Force the header to be dark mode while we have an image behind it ?????
 
   return (
     <div
